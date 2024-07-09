@@ -1,0 +1,29 @@
+<tool id="pycaret_tool" name="PyCaret Model Training" version="@VERSION@" profile="@PROFILE@">
+    <description>Evaluate machine learning models using PyCaret.</description>
+    <macros>
+        <import>pycaret_macros.xml</import>
+    </macros>
+    <expand macro="python_requirements" />
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/pycaret_evaluate.py' $input_file $target_feature "`pwd`" $model_type $model_file
+        ]]>
+    </command>
+    <inputs>
+        <param name="model_type" type="select" label="Task">
+            <option value="classification" >classification</option>
+            <option value="regression" >regression</option>
+        </param>
+        <param name="input_file" type="data" format="csv,tabular" label="Input Dataset (CSV or TSV)"/>
+        <param name="target_feature" multiple="false" type="data_column" use_header_names="true" data_ref="input_file" label="Select the target column:" />
+        <param name="model_file" type="data" format="pkl" label="Input the model file in .pkl format"
+    </inputs>
+    <outputs>
+        <data name="dashboard" format="html" from_work_dir="dashboard.html" label="${tool.name} Dashboard on ${on_string}"/>
+        <data name="comparison_result" format="html" from_work_dir="comparison_result.html" label="${tool.name} Comparison result on ${on_string}"/>
+    </outputs>
+    <help>
+        This tool uses PyCaret to evaluate machine learning models.
+        Ensure that the Conda environment specified in the requirements is correctly set up.
+    </help>
+</tool>

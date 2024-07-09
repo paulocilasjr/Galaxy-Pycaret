@@ -19,6 +19,10 @@ class BaseModelTrainer:
         self.results = None
         self.plots = {}
 
+    def load_model(self, model):
+        LOG.info(f"Loading model")
+        self.best_model = self.exp.load_model(model)
+
     def load_data(self):
         LOG.info(f"Loading data from {self.input_file}")
         self.data = pd.read_csv(self.input_file, sep=None, engine='python')
@@ -159,6 +163,14 @@ class BaseModelTrainer:
         self.setup_pycaret()
         self.train_model()
         self.save_model()
+        self.generate_plots()
+        self.save_html_report()
+        self.save_dashboard()
+
+    def evaluate(self,model):
+        self.load_data()
+        self.setup_pycaret()
+        self.load_model(model)
         self.generate_plots()
         self.save_html_report()
         self.save_dashboard()
